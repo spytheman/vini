@@ -1,0 +1,108 @@
+[user]
+	email = jsmith@example.com
+	name = Joe Smith
+
+[branch]
+	autosetuprebase = always
+[push]
+	default = simple
+[pull]
+	rebase = true
+[tig]
+	tab-size = 4
+[tig "color"]
+	date = magenta default bold
+[web]
+	browser = google-chrome
+[grep]
+	lineNumber = true
+[color]
+	ui = auto
+[i18n]
+	commitencoding = utf8
+[apply]
+	whitespace = strip
+[diff]
+	renames = copy
+	ignore-all-space = true
+	tool = kdiff3
+	guitool = kdiff3
+  renameLimit = 1000
+[core]
+	pager = less
+	whitespace = -trailing-space,-indent-with-non-tab,-tab-in-indent,-cr-at-eol
+	autocrlf = false
+	excludesfile = ~/.gitexclude
+	quotepath = off
+	editor = emacs
+	filemode = false
+[merge]
+	summary = true
+	tool = kdiff3
+	verbosity = 3
+[transfer]
+	fsckobjects = true
+[fetch]
+	fsckobjects = true
+[receive]
+	fsckObjects = true
+[alias]
+	s = status --short
+	st = status -sb
+	co = checkout
+	wu = log --stat origin..@{0}
+	wup = log -p origin..@{0}
+	last = cat-file commit HEAD
+	logtree = log --graph
+	ci = commit
+	cc = commit -m Cleanup.
+	di = diff
+	dc = diff --cached
+	amend = commit --amend
+	aa = add --all
+	head = !git l -1
+	h = !git head
+	r = !git l -20
+	ra = !git r --all
+	ff = merge --ff-only
+	pullff = pull --ff-only
+	noff = merge --no-ff
+	l = !~/.githelpers
+	la = !git l --all
+	div = divergence
+	gn = goodness
+	gnc = goodness --cached
+	fa = fetch --all
+	pom = push origin master
+	b = branch
+	ds = diff --stat=160,120
+	dh1 = diff HEAD~1
+	g = grep --break --heading --line-number
+	tree = log --graph --decorate --pretty=oneline --abbrev-commit
+	hist = log --pretty=format:'%Cred%h%Creset %Cgreen%ad%Creset | %C(5)%s%d%Creset %C(8)[%an]%Creset' --graph --date=short
+  
+  lol = log --oneline --graph --decorate
+  lola = log --oneline --graph --decorate --all
+  lols = log --oneline --graph --decorate --all --max-count=10
+
+[gui]
+	fontui = -family georgia -size 12 -weight bold -slant roman -underline 0 -overstrike 0
+	fontdiff = -family fixed -size 12 -weight normal -slant roman -underline 0 -overstrike 0
+	editor = emacs
+	spellingdictionary = en
+	diffcontext = 12
+	warndetachedcommit = true
+	tabsize = 4
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[url "ssh://git@git.kde.org/"]
+	pushInsteadOf = kde:
+[gc]
+	autoDetach = false
+[difftool "kdiff3"]
+	path = /usr/bin/kdiff3
+[mergetool "kdiff3"]
+	path = /usr/bin/kdiff3
