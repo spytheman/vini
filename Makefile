@@ -5,13 +5,13 @@ help: ## Show this help: a short list of most usefull make targets, with their d
 	@grep -P '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 clean: ## remove build artefacts
-	rm -rf *_test .*.c
+	rm -rf *_test .*.c fns.txt
  
 
 test: test_simple test_extended ## Run all module tests
 
 test_simple: ## Run only basic module tests
-	@v vini_test.v
+	@v -g vini_test.v
 
 test_extended: ## Run extended (slower) module tests
-	@v vini_extended_test.v
+	@v -g vini_extended_test.v
