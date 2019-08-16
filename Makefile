@@ -6,12 +6,12 @@ help: ## Show this help: a short list of most usefull make targets, with their d
 
 clean: ## remove build artefacts
 	rm -rf *_test .*.c fns.txt
- 
+
 
 test: test_simple test_extended ## Run all module tests
 
 test_simple: ## Run only basic module tests
-	@v -g vini_test.v
+	v -g vini_test.v
 
 test_extended: ## Run extended (slower) module tests
-	@v -g vini_extended_test.v
+	v -g vini_extended_test.v
