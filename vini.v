@@ -136,6 +136,7 @@ pub fn (r mut IniReader) parse() IniResults {
 			new_section_name := r.new_section_name()
 			if new_section_name != '' {
 				println( '// Found new section: "$new_section_name" ')
+				r.csection = new_section_name
 			}
 			continue
 		}
