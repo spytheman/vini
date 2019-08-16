@@ -81,9 +81,7 @@ fn (r mut IniReader) comment_till_end_of_line() string {
 	mut cstart := r.pos
 	for {
 		c = r.text[ r.pos ]
-		if c == `\r` || c == `\n` {
-			break
-		}
+		if c == `\r` || c == `\n` { break }
 		r.pos++
 	}
 	return r.text.substr( cstart, r.pos )
@@ -95,11 +93,14 @@ fn (r mut IniReader) new_section_name() string {
 	mut cstart := r.pos
 	for {
 		c = r.text[ r.pos ]
-		if c == `]` { break	}
 		r.pos++
+		if c == `]` { break	}
+		if c == `\r` || c == `\n` {
+			println('// Warning: incomplete section at line ${r.line} . No `]` found.')
+			return ''
+		}
 	}
-	sname := r.text.substr( cstart, r.pos )
-	r.pos++
+	sname := r.text.substr( cstart, r.pos - 1)
 	return sname
 }
 
@@ -114,7 +115,6 @@ pub fn (r mut IniReader) parse() IniResults {
 	mut n := ` `
 	println('len: $r.text.len ')
 	for {
-		r.col++
 		if r.pos >= r.text.len { break }
 		c = r.text[ r.pos ]
 		n = if r.pos + 1 < r.text.len { r.text[ r.pos + 1 ] }else{` `}
@@ -134,10 +134,13 @@ pub fn (r mut IniReader) parse() IniResults {
 		}
 		if c == `[`  {
 			new_section_name := r.new_section_name()
-			println( '// Found new section: "$new_section_name" ')
+			if new_section_name != '' {
+				println( '// Found new section: "$new_section_name" ')
+			}
 			continue
 		}
 		r.pos++
+		r.col++
 	}
 	return r.output
 }
