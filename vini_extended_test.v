@@ -3,6 +3,7 @@
 import spytheman.vini
 
 fn test_extended_1() {
+	println('')
 	println('hello from test_extended_1')
 	assert true
 }
