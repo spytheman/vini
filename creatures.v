@@ -3,6 +3,7 @@
 // a minimized maps of objects, containing other maps initialization example
 
 struct Section {
+	mut:
 	description string
 	values map[string]string
 }
@@ -11,7 +12,7 @@ fn (s Section) str() string {
 	return 'description: "$s.description" \nvalues: ' + s.values.str()
 }
 fn (sectionMap map[string]Section) str() string {
-	mut res := []string
+	mut res := []string{}
 	res << 'map of sections:'
 	for k,v in sectionMap {
 		res << 'k: $k | v: ' + v.str()
@@ -28,7 +29,7 @@ fn main(){
 	all['animals'].values['cat'] = 'Tom'
 	all['animals'].values['mouse'] = 'Jerry'
 	println('The mouse is named: ' + all['animals'].values['mouse'] )
-	
+
 	println('All creatures:')
 	println(all)
 }

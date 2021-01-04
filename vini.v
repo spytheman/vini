@@ -98,10 +98,10 @@ pub fn new_ini_reader_with_config(text string, cfg IniConfig) IniReader {
 		csection: ''
 	}
 }
-pub fn parse_ini_file(path string) IniReader? {
+pub fn parse_ini_file(path string) ?IniReader {
 	return parse_ini_file_with_config(path, new_default_ini_config())
 }
-pub fn parse_ini_file_with_config(path string, cfg IniConfig) IniReader? {
+pub fn parse_ini_file_with_config(path string, cfg IniConfig) ?IniReader {
 	println('parse_ini_file_with_config path: $path ...')
 	text := os.read_file(path) or { return error('Could not read file: $path') }
 	mut r := new_ini_reader_with_config(text, cfg)
@@ -145,7 +145,7 @@ fn (r mut IniReader) handle_comments(cc byte) bool {
 }
 
 fn (r mut IniReader) handle_sections(cc byte) bool {
-	if cc == `[`  {		
+	if cc == `[`  {
 		mut c := ` `
 		r.pos++
 		mut cstart := r.pos
@@ -157,7 +157,7 @@ fn (r mut IniReader) handle_sections(cc byte) bool {
 				println('// Warning: incomplete section at line ${r.line} . No `]` found.')
 				return false
 			}
-		}	
+		}
 		new_section_name := r.text.substr( cstart, r.pos - 1)
 		println( '// Found new section: "$new_section_name" ')
 		r.csection = new_section_name
