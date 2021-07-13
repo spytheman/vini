@@ -3,7 +3,11 @@
 import spytheman.vini
 
 fn test_extended_1() {
-	println('')
 	println('hello from test_extended_1')
 	assert true
+}
+
+fn test_new_ini_reader() {
+	x := vini.new_ini_reader('') 
+	dump(x)
 }

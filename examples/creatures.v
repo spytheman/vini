@@ -1,5 +1,5 @@
 /*  -*- Mode: Go; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
-
+module main
 // a minimized maps of objects, containing other maps initialization example
 
 struct Section {

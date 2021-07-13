@@ -2,18 +2,14 @@
 
 import spytheman.vini
 
-fn test_default_parser() {
+fn test_default_parser() ? {
 	println('')
-	r := vini.parse_ini_file('example_ini_files/typed_ini.conf') or {
-		panic('error 1')
-	}
+	r := vini.parse_ini_file('example_ini_files/typed_ini.conf') ?
 	println(r)
 }
 
-fn test_colon_parser() {	
+fn test_colon_parser() ? {
 	println('')
-	r := vini.parse_ini_file('example_ini_files/colon_as_delimiter.conf') or {
-		panic('error 2')
-	}
+	r := vini.parse_ini_file('example_ini_files/colon_as_delimiter.conf') ?
 	println(r)
 }

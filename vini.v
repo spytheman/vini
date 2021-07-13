@@ -36,27 +36,27 @@ mut:
 	sections map[string]IniSection
 }
 
-fn (v IniValue) str() string {
+pub fn (v IniValue) str() string {
 	return '$v.key = $v.value # kind: $v.kind'
 }
-fn (section IniSection) str() string {
-	mut res := []string
+pub fn (section IniSection) str() string {
+	mut res := []string{}
 	res << '[$section.title]'
-	for k,v in section.values {	res << v.str()	}
+	for _,v in section.values {	res << v.str()	}
 	return res.join('\n')
 }
-fn (sections map[string]IniSection) str() string {
-	mut res := []string
-	for k,v in sections {
+pub fn (sections map[string]IniSection) str() string {
+	mut res := []string{}
+	for _,v in sections {
 		res << v.str()
 		res << '\n'
 	}
 	return res.join('\n')
 }
-fn (results IniResults) str() string {
+pub fn (results IniResults) str() string {
 	return results.sections.str()
 }
-fn (results mut IniResults) add_section(sname string) {
+fn (mut results IniResults) add_section(sname string) {
 	if !(sname in results.sections) {
 		mut s := IniSection{ title: sname }
 		s.values['zz'] = IniValue{ key: 'k', value: 'v', kind: 'comment' }
@@ -98,10 +98,10 @@ pub fn new_ini_reader_with_config(text string, cfg IniConfig) IniReader {
 		csection: ''
 	}
 }
-pub fn parse_ini_file(path string) IniReader? {
+pub fn parse_ini_file(path string) ?IniReader {
 	return parse_ini_file_with_config(path, new_default_ini_config())
 }
-pub fn parse_ini_file_with_config(path string, cfg IniConfig) IniReader? {
+pub fn parse_ini_file_with_config(path string, cfg IniConfig) ?IniReader {
 	println('parse_ini_file_with_config path: $path ...')
 	text := os.read_file(path) or { return error('Could not read file: $path') }
 	mut r := new_ini_reader_with_config(text, cfg)
@@ -110,13 +110,13 @@ pub fn parse_ini_file_with_config(path string, cfg IniConfig) IniReader? {
 }
 
 //////////////////////////////////////////////////////////////
-fn (r mut IniReader) skip_line_ends(skipchars int) {
+fn (mut r IniReader) skip_line_ends(skipchars int) {
 	r.line++
 	r.pos += skipchars
 	r.col = 0
 }
 
-fn (r mut IniReader) handle_new_lines(c byte, n byte) bool {
+fn (mut r IniReader) handle_new_lines(c byte, n byte) bool {
 	if c == `\r` && n == `\n` {
 		r.skip_line_ends(2)
 		return true
@@ -128,7 +128,7 @@ fn (r mut IniReader) handle_new_lines(c byte, n byte) bool {
 	return false
 }
 
-fn (r mut IniReader) handle_comments(cc byte) bool {
+fn (mut r IniReader) handle_comments(cc byte) bool {
 	if cc == r.config.comment || cc == r.config.comment_semi {
 		mut c := ` `
 		mut cstart := r.pos
@@ -137,15 +137,15 @@ fn (r mut IniReader) handle_comments(cc byte) bool {
 			if c == `\r` || c == `\n` { break }
 			r.pos++
 		}
-		comment := r.text.substr( cstart, r.pos )
+		comment := r.text[cstart..r.pos]
 		println( '// Found comment: "$comment" ' )
 		return true
 	}
 	return false
 }
 
-fn (r mut IniReader) handle_sections(cc byte) bool {
-	if cc == `[`  {		
+fn (mut r IniReader) handle_sections(cc byte) bool {
+	if cc == `[`  {
 		mut c := ` `
 		r.pos++
 		mut cstart := r.pos
@@ -157,8 +157,8 @@ fn (r mut IniReader) handle_sections(cc byte) bool {
 				println('// Warning: incomplete section at line ${r.line} . No `]` found.')
 				return false
 			}
-		}	
-		new_section_name := r.text.substr( cstart, r.pos - 1)
+		}
+		new_section_name := r.text[cstart .. r.pos - 1]
 		println( '// Found new section: "$new_section_name" ')
 		r.csection = new_section_name
 		r.output.add_section( r.csection )
@@ -167,11 +167,11 @@ fn (r mut IniReader) handle_sections(cc byte) bool {
 	return false
 }
 
-fn (r mut IniReader) peek() byte {
+fn (mut r IniReader) peek() byte {
 	return if r.pos + 1 < r.text.len { r.text[ r.pos + 1 ] }else{` `}
 }
 
-pub fn (r mut IniReader) parse() IniResults {
+pub fn (mut r IniReader) parse() IniResults {
 	mut c := ` `
 	mut n := ` `
 	println('len: $r.text.len ')
